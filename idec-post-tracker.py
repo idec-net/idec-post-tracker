@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf8 -*-
 
 import sys, os, urllib.request, urllib.parse, json, base64
@@ -80,6 +80,11 @@ for line in config.splitlines():
     number = keys[0]
     provider = keys[1]
 
+    if len(keys[2:]) > 0:
+        extra = " ".join(keys[2:])
+    else:
+        extra = "None"
+
     try:
         worker = None
         if provider == "cainiao":
@@ -97,13 +102,19 @@ for line in config.splitlines():
             print("Error getting data")
             continue
 
-        time, message = worker.parser(data)
+        try:
+            time, message = worker.parser(data)
+        except Exception as e:
+            print(data)
+            print(str(e))
+            continue
+
         if isEmpty(time):
             print("Error: time is empty")
             continue
 
         if changedLastTime(number, time):
-            tmsg = echoarea + "\n" + "All" + "\n" + number + "\n\n" + (time + " - " + message).strip()
+            tmsg = echoarea + "\n" + "All" + "\n" + extra + "\n\n" + number + "\n\n" + (time + " - " + message).strip()
             tmsg = base64.b64encode(tmsg.encode("utf-8"))
 
             post_data = urllib.parse.urlencode({"tmsg": tmsg, "pauth": auth}).encode("utf-8")
