@@ -15,8 +15,7 @@ def isEmpty(string):
 def changedLastTime(number, time):
     try:
         f = open(cacheDir + "/" + number).read()
-        if f == time:
-            return False
+        return not (f == time)
     except:
         return True
 
