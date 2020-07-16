@@ -42,9 +42,9 @@ class Cainiao:
         return json.loads(data)
 
     def parser(self, data):
-        lastparcel = data["data"][0]["section2"]["detailList"][0]
-        time = lastparcel["time"]
-        message = lastparcel["desc"]
+        lastparcel = data["data"][0]
+        time = lastparcel["cachedTime"]
+        message = lastparcel["statusDesc"]
 
         return time, message
 
